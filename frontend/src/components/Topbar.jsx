@@ -1,6 +1,6 @@
 import { useAuth } from '../context/AuthContext'
 import { useLocation } from 'react-router-dom'
-import { Bell, LogOut } from 'lucide-react'
+import { Bell, LogOut, Menu } from 'lucide-react'
 
 const PAGE_TITLES = {
   '/admin': ['Dashboard', 'Welcome back! Here\'s your hospital overview.'],
@@ -28,7 +28,7 @@ const PAGE_TITLES = {
   '/receptionist/billing': ['Billing', 'Collect payments & invoices'],
 }
 
-export default function Topbar() {
+export default function Topbar({ onMenuClick }) {
   const { user, logout } = useAuth()
   const { pathname } = useLocation()
   const [title, subtitle] = PAGE_TITLES[pathname] || ['HMS', 'Hospital Management System']
@@ -39,19 +39,24 @@ export default function Topbar() {
   return (
     <div className="topbar">
       <div className="topbar-left">
-        <h2>{title}</h2>
-        <p>{subtitle} &mdash; {dateStr}</p>
+        <button className="mobile-menu-btn" onClick={onMenuClick} aria-label="Open menu">
+          <Menu size={22} />
+        </button>
+        <div>
+          <h2>{title}</h2>
+          <p className="topbar-subtitle">{subtitle} &mdash; {dateStr}</p>
+        </div>
       </div>
       <div className="topbar-right">
         <div className="topbar-badge" title="Notifications">
           <Bell size={18} />
           <div className="badge-dot"></div>
         </div>
-        <div className="topbar-user">
+        <div className="topbar-user hide-mobile">
           <div className="t-avatar">{user?.name?.charAt(0).toUpperCase()}</div>
           <span>{user?.name?.split(' ')[0]}</span>
         </div>
-        <button className="logout-btn" onClick={logout} style={{display:'flex',alignItems:'center',gap:'6px'}}><LogOut size={14} /> Sign Out</button>
+        <button className="logout-btn hide-mobile" onClick={logout} style={{display:'flex',alignItems:'center',gap:'6px'}}><LogOut size={14} /> Sign Out</button>
       </div>
     </div>
   )

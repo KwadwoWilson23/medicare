@@ -1,6 +1,8 @@
 import axios from 'axios'
 
-const api = axios.create({ baseURL: '/api', timeout: 10000 })
+const baseURL = import.meta.env.VITE_API_URL || '/api'
+
+const api = axios.create({ baseURL, timeout: 10000 })
 
 api.interceptors.request.use(cfg => {
   const token = localStorage.getItem('hms_token')
